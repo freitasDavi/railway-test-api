@@ -18,6 +18,10 @@ public class AuthService : IAuthService
     
     public string GenerateToken(User user)
     {
+        var tokenSecret = Environment.GetEnvironmentVariable("TOKEN_SECRET");
+        var tokenAudience = Environment.GetEnvironmentVariable("TOKEN_AUDIENCE");
+        var tokenIssuer = Environment.GetEnvironmentVariable("TOKEN_ISSUER");
+        
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, user.Email),
@@ -27,13 +31,13 @@ public class AuthService : IAuthService
 
         var securityKey =
             new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration.GetSection("Token").GetValue<string>("Key")!));
+                Encoding.UTF8.GetBytes(tokenSecret ?? _configuration.GetSection("Token").GetValue<string>("Key")!));
         
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
             claims: claims,
-            issuer: _configuration.GetSection("Token").GetValue<string>("Issuer"),
-            audience: _configuration.GetSection("Token").GetValue<string>("Audience"),
+            issuer: tokenIssuer ?? _configuration.GetSection("Token").GetValue<string>("Issuer"),
+            audience: tokenAudience ?? _configuration.GetSection("Token").GetValue<string>("Audience"),
             expires: DateTime.Now.AddHours(1),
             signingCredentials: credentials
         );
