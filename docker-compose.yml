@@ -1,0 +1,12 @@
+﻿services:
+  azuretest:
+    image: azuretest
+    build:
+      context: .
+      dockerfile: AzureTest/Dockerfile
+
+  azuretest-1:
+    image: azuretest-1
+    build:
+      context: .
+      dockerfile: AzureTest/Dockerfile

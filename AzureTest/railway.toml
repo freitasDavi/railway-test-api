@@ -1,0 +1,8 @@
+﻿[build]
+builder = "dockerfile"
+dockerfilePath = "./Dockerfile"
+
+[deploy]
+startCommand = "./AzureTest"
+restartPolicyTyp = "always"
+healthcheckPath = "/health"
