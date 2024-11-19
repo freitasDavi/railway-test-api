@@ -1,3 +1,9 @@
+using AzureTest.Extensions;
+using AzureTest.Interfaces;
+using AzureTest.Services;
+using AzureTest.Utils;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
@@ -5,12 +11,18 @@ builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Services.AddHealthChecks();
 
+builder.Services.AddDbContext<Context>(options => 
+    options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? builder.Configuration.GetConnectionString("DefaultConnection") )
+);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+ConfigureDependencyInjection(builder.Services);
 
 var app = builder.Build();
 
@@ -29,4 +41,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.CreateDbIfNotExists();
+
 app.Run();
+
+void ConfigureDependencyInjection(IServiceCollection services)
+{
+    services.AddScoped<IUsersService, UsersService>();
+    services.AddScoped<IAuthService, AuthService>();
+}
