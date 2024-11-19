@@ -11,8 +11,13 @@ builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Services.AddHealthChecks();
 
+var connectionString = Environment.GetEnvironmentVariable("dbConnectionString");
+
+Console.WriteLine("Test");
+Console.WriteLine(connectionString);
+
 builder.Services.AddDbContext<Context>(options => 
-    options.UseNpgsql(Environment.GetEnvironmentVariable("dbConnectionString") ?? builder.Configuration.GetConnectionString("DefaultConnection") )
+    options.UseNpgsql(connectionString ?? builder.Configuration.GetConnectionString("DefaultConnection") )
 );
 
 // Add services to the container.
