@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AzureTest.Controllers;
 
 [ApiController]
-[Route("/")]
+[Route("/api/[controller]")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
@@ -28,5 +28,11 @@ public class WeatherForecastController : ControllerBase
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+    }
+
+    [HttpGet("Environment")]
+    public string GetEnvironment()
+    {
+        return Environment.GetEnvironmentVariable("dbsecret") ?? "Code";
     }
 }
