@@ -7,6 +7,7 @@ public static class StartupDbExtensions
 {
     public static async void CreateDbIfNotExists(this IHost host)
     {
+        Console.WriteLine("Here?");
         using var scope = host.Services.CreateScope();
         var services = scope.ServiceProvider;
 
