@@ -33,6 +33,6 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("Environment")]
     public string GetEnvironment()
     {
-        return Environment.GetEnvironmentVariable("dbsecret") ?? "Code";
+        return "Code";
     }
 }

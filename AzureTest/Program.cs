@@ -17,7 +17,7 @@ Console.WriteLine("Test");
 Console.WriteLine(connectionString);
 
 builder.Services.AddDbContext<Context>(options => 
-    options.UseNpgsql(connectionString ?? builder.Configuration.GetConnectionString("DefaultConnection") )
+    options.UseNpgsql(connectionString)
 );
 
 // Add services to the container.
